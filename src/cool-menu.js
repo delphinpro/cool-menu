@@ -173,7 +173,7 @@ export class CoolMenu {
             this.toggleMenu(false);
         });
 
-        delegate(this.html.coolMenu, 'click', 'a', (e, target) => {
+        delegate(this.html.coolMenu, 'click', `.${this.opt.menuNestedClass}`, (e, target) => {
             let children = JSON.parse(target.dataset['children']);
 
             if (children) {
@@ -182,7 +182,7 @@ export class CoolMenu {
                 this.level++;
                 this.renderLevel(children);
 
-                this.addHeaderText(target.innerText);
+                this.addHeaderText(target.dataset['header']);
                 this.updateHeaderText();
                 this.html.header.classList.add(this.opt.headerActiveClass);
 
@@ -232,13 +232,13 @@ export class CoolMenu {
             anchorElement.setAttribute('href', item.link);
             anchorElement.innerHTML = item.text;
 
-            anchorElement.dataset['children'] = JSON.stringify(item.children);
             listItemElement.appendChild(anchorElement);
 
             if (item.children) {
                 let nestedElement                 = createElement('span', this.opt.menuNestedClass);
                 nestedElement.innerHTML           = `<span>${item.children.length}</span>`;
-                nestedElement.dataset['children'] = item.children;
+                nestedElement.dataset['children'] = JSON.stringify(item.children);
+                nestedElement.dataset['header']   = anchorElement.innerText;
                 listItemElement.appendChild(nestedElement);
             }
 

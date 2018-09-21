@@ -141,6 +141,7 @@ $cool-menu-color: #475577;
 
   &__item {
     position: relative;
+    display: flex;
   }
 
   &__link {
@@ -149,6 +150,7 @@ $cool-menu-color: #475577;
     color: $cool-menu-color;
     border-bottom: 1px solid rgba(#000, 0.1);
     padding: 11px 44px 11px 20px;
+    flex-grow: 1;
 
     &:hover {
       background: rgba($cool-menu-color, 0.1);
@@ -156,10 +158,10 @@ $cool-menu-color: #475577;
   }
 
   &__nested {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
+    position: relative;
+    border-bottom: 1px solid rgba(#000, 0.1);
+    border-left: 1px solid rgba(#000, 0.1);
+    flex-shrink: 0;
     width: 44px;
     text-align: right;
     display: flex;
@@ -168,8 +170,10 @@ $cool-menu-color: #475577;
     text-decoration: none;
     color: #000000;
     font-size: 0.8em;
-    pointer-events: none;
-    opacity: 0.5;
+
+    & > span, &::after {
+      opacity: 0.5;
+    }
 
     &::after {
       margin-left: 0.5em;
