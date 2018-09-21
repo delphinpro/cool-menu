@@ -48,13 +48,13 @@ function createElement(tagName, cssClass) {
     return el;
 }
 
-function delegate(root, name, child, func) {
+function delegate(root, eventName, child, func) {
     let className = null;
     if (child.charAt(0) === '.') {
         className = child.replace(/^\./, '');
     }
 
-    root.addEventListener(name, function(e) {
+    root.addEventListener(eventName, function(e) {
         let target = e.target;
         while (target !== this) {
             if (target.tagName === child.toUpperCase()
