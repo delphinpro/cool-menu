@@ -6,9 +6,9 @@
  *== Cool Menu
  *== ======================================= ==*/
 
-$cool-menu-z-index: 9999;
-$cool-menu-width: 320px;
-$cool-menu-color: #475577;
+$cool-menu-z-index: 9999 !default;
+$cool-menu-width: 320px !default;
+$cool-menu-color: #475577 !default;
 
 .cool-menu-backdrop {
   position: fixed;
