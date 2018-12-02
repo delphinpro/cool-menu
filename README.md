@@ -2,6 +2,8 @@
 
 Простое многоуровневое мобильное меню.
 
+![Скриншот](screen.png)
+
 ## Установка
 
 ```
@@ -14,7 +16,7 @@ npm install cool-menu
 <srcipt src="path-to/cool-menu.js"></script>
 ```
 
-## Использвание
+## Использование
 
 ```javascript
 import CoolMenu from 'cool-menu'; // Если используется бандлер
