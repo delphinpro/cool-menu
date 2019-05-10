@@ -9,6 +9,7 @@
 $cool-menu-z-index: 9999 !default;
 $cool-menu-width: 320px !default;
 $cool-menu-color: #475577 !default;
+$cool-menu-clip-body-when-opened: false !default;
 
 .cool-menu-backdrop {
   position: fixed;
@@ -43,9 +44,11 @@ $cool-menu-color: #475577 !default;
   }
 
   @at-root {
-    body.is-open-cool-menu,
-    html.is-open-cool-menu body {
-      overflow: hidden;
+    @if $cool-menu-clip-body-when-opened {
+      body.is-open-cool-menu,
+      html.is-open-cool-menu body {
+        overflow: hidden;
+      }
     }
   }
 
