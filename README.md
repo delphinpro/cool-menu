@@ -106,3 +106,9 @@ $cool-menu-clip-body-when-opened: false !default;
 | `bodyOpenClass` | `'is-open-cool-menu'` | CSS-класс
 | `onShow` | `null` | Коллбэк на открытие меню
 | `onClose` | `null` | Коллбэк на закрытие меню
+
+## Публичные методы
+
+| Method | Description
+|:---|:---|
+| `toggleMenu(state)` | Переключение отображения меню. Boolean параметр: true — показать меню, false — скрыть меню.
