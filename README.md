@@ -104,4 +104,5 @@ $cool-menu-clip-body-when-opened: false !default;
 | `backdropClass` | `'cool-menu-backdrop'` | CSS-класс
 | `buttonOpenClass` | `'open'` | CSS-класс
 | `bodyOpenClass` | `'is-open-cool-menu'` | CSS-класс
+| `onShow` | `null` | Коллбэк на открытие меню
 | `onClose` | `null` | Коллбэк на закрытие меню

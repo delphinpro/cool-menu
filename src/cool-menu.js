@@ -116,6 +116,7 @@ export class CoolMenu {
             backdropClass    : `${blockClass}-backdrop`,
             buttonOpenClass  : `open`,
             bodyOpenClass    : `is-open-cool-menu`,
+            onShow           : null,
             onClose          : null,
             ...options,
         };
@@ -209,6 +210,9 @@ export class CoolMenu {
 
         this.html.coolMenu.classList.toggle(this.opt.stateOpenClass, state);
         document.body.classList.toggle(this.opt.bodyOpenClass, state);
+        if (state && typeof this.opt.onShow === 'function') {
+            this.opt.onShow();
+        }
         if (!state && typeof this.opt.onClose === 'function') {
             this.opt.onClose();
         }

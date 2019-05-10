@@ -1,7 +1,7 @@
 {
   "name": "cool-menu",
   "description": "Multi level mobile menu",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "dist/cool-menu.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development ./node_modules/.bin/webpack",
