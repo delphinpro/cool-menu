@@ -170,6 +170,7 @@ $cool-menu-color: #475577 !default;
     text-decoration: none;
     color: #000000;
     font-size: 0.8em;
+    cursor: pointer;
 
     & > span, &::after {
       opacity: 0.5;
