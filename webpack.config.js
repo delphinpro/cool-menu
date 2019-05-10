@@ -5,7 +5,7 @@ const pkg            = require('./package.json');
 
 const banner = `Cool Menu
 @author      ${pkg.author}
-@copyright   copyright © 2017—2018 delphinpro
+@copyright   copyright © 2017—2019 delphinpro
 @license     licensed under the ${pkg.license} license
 @version     ${pkg.version}
 

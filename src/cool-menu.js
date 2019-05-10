@@ -1,7 +1,7 @@
 /**
  * Cool Menu
  * @author      delphinpro <delphinpro@gmail.com>
- * @copyright   copyright © 2017—2018 delphinpro
+ * @copyright   copyright © 2017—2019 delphinpro
  * @license     licensed under the MIT license
  */
 
@@ -11,35 +11,22 @@ function isListElement(el) {
     return (el instanceof HTMLOListElement) || (el instanceof HTMLUListElement);
 }
 
-function isAnchorElement(el) {
-    return (el instanceof HTMLAnchorElement);
+function isObject(o) {
+    return ((typeof o === 'object') && (o !== null) && !(o instanceof Element));
 }
 
-function isValidSource(el) {
-    return isListElement(el);
-}
+/**
+ * @param  {HTMLElement|object} sourceItem
+ * @returns {Boolean}
+ */
+function isValidSource(sourceItem) {
+    if (isObject(sourceItem)) {
+        if (!sourceItem.hasOwnProperty('container')) return false;
 
-function loadDataFromHtml(menu) {
-    let list = [];
+        return isListElement(sourceItem.container);
+    }
 
-    [].forEach.call(menu.children, element => {
-        let anchorElement = [].filter.call(element.children, el => isAnchorElement(el))[0];
-        let listElement   = [].filter.call(element.children, el => isListElement(el))[0];
-
-        let item = {
-            text    : anchorElement.innerText.trim(),
-            link    : anchorElement.getAttribute('href') || '',
-            children: false,
-        };
-
-        if (listElement) {
-            item.children = loadDataFromHtml(listElement);
-        }
-
-        list.push(item);
-    });
-
-    return list;
+    return isListElement(sourceItem);
 }
 
 function createElement(tagName, cssClass) {
@@ -48,13 +35,41 @@ function createElement(tagName, cssClass) {
     return el;
 }
 
+/**
+ * @param {object} sio
+ * @returns {Array}
+ */
+function loadDataFromHtml(sio) {
+    let list = [];
+
+    Array.prototype.forEach.call(sio.container.children, liElement => {
+        let titleElement = liElement.querySelector(sio.selectorTitle);
+        let listElement  = liElement.querySelector(sio.selectorList);
+
+        let item = {
+            text    : titleElement.innerText.trim(),
+            link    : titleElement.getAttribute('href') || '',
+            children: false,
+        };
+
+        if (listElement && isListElement(listElement)) {
+            const nextSio = { ...sio, container: listElement };
+            item.children = loadDataFromHtml(nextSio);
+        }
+
+        list.push(item);
+    });
+
+    return list;
+}
+
 function delegate(root, eventName, child, func) {
     let className = null;
     if (child.charAt(0) === '.') {
         className = child.replace(/^\./, '');
     }
 
-    root.addEventListener(eventName, function(e) {
+    root.addEventListener(eventName, function (e) {
         let target = e.target;
         while (target !== this) {
             if (target.tagName === child.toUpperCase()
@@ -68,12 +83,19 @@ function delegate(root, eventName, child, func) {
     });
 }
 
+const defaultSourceItemParams = {
+    group        : null,
+    container    : null,
+    selectorTitle: 'a',
+    selectorList : 'ul',
+};
+
 export class CoolMenu {
     constructor(options) {
-        let blockClass = 'cool-menu';
-        this.data      = [];
-        this.level     = 0;
-        this.opt       = {
+        const blockClass = 'cool-menu';
+        this.data        = [];
+        this.level       = 0;
+        this.opt         = {
             source           : null,
             button           : null,
             container        : document.body,
@@ -97,12 +119,14 @@ export class CoolMenu {
             onClose          : null,
             ...options,
         };
-        this.headers   = [this.opt.headerText];
+        this.headers     = [this.opt.headerText];
+        this.sources     = [];
 
         if (options.source && !Array.isArray(options.source)) {
             throw new Error(msgInvalidSource);
         }
 
+        this.prepareSources();
         this.loadData();
     }
 
@@ -141,15 +165,39 @@ export class CoolMenu {
         this.headers.pop();
     }
 
-    loadData() {
-        this.opt.source.forEach(item => {
-            if (!isValidSource(item)) {
-                throw new Error(msgInvalidSource);
-            }
+    prepareSources() {
+        this.opt.source.forEach(sourceItem => {
+            let validSourceItem = {
+                ...defaultSourceItemParams,
+                ...(isObject(sourceItem) ? sourceItem : { container: sourceItem }),
+            };
 
-            this.data = [
+            if (isValidSource(validSourceItem)) {
+                this.sources.push(validSourceItem);
+            } else {
+                console.error(msgInvalidSource);
+            }
+        });
+    }
+
+    loadData() {
+        this.sources.forEach(sourceItemObject => {
+            let itemData = loadDataFromHtml(sourceItemObject);
+            this.data    = [
                 ...this.data,
-                ...loadDataFromHtml(item),
+                ...(
+                    sourceItemObject.group
+                        ? [
+                            {
+                                text           : sourceItemObject.group.title,
+                                link           : sourceItemObject.group.link,
+                                customItemClass: sourceItemObject.group.customItemClass,
+                                customLinkClass: sourceItemObject.group.customLinkClass,
+                                children       : itemData,
+                            },
+                        ]
+                        : itemData
+                ),
             ];
         });
     }
@@ -228,9 +276,13 @@ export class CoolMenu {
         items.forEach(item => {
             let listItemElement = createElement('li', this.opt.menuItemClass);
 
+            if (item.customItemClass) listItemElement.classList.add(item.customItemClass);
+
             let anchorElement = createElement('a', this.opt.menuLinkClass);
             anchorElement.setAttribute('href', item.link);
             anchorElement.innerHTML = item.text;
+
+            if (item.customLinkClass) anchorElement.classList.add(item.customLinkClass);
 
             listItemElement.appendChild(anchorElement);
 
