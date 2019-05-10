@@ -111,4 +111,5 @@ $cool-menu-clip-body-when-opened: false !default;
 
 | Method | Description
 |:---|:---|
+| `create()` | Создать меню.
 | `toggleMenu(state)` | Переключение отображения меню. Boolean параметр: true — показать меню, false — скрыть меню.
