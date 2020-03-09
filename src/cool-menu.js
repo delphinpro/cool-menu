@@ -46,18 +46,20 @@ function loadDataFromHtml(sio) {
         let titleElement = liElement.querySelector(sio.selectorTitle);
         let listElement  = liElement.querySelector(sio.selectorList);
 
-        let item = {
-            text    : titleElement.innerText.trim(),
-            link    : titleElement.getAttribute('href') || '',
-            children: false,
-        };
+        if (titleElement) {
+            let item = {
+                text    : titleElement.innerText.trim(),
+                link    : titleElement.getAttribute('href') || '',
+                children: false,
+            };
 
-        if (listElement && isListElement(listElement)) {
-            const nextSio = { ...sio, container: listElement };
-            item.children = loadDataFromHtml(nextSio);
+            if (listElement && isListElement(listElement)) {
+                const nextSio = { ...sio, container: listElement };
+                item.children = loadDataFromHtml(nextSio);
+            }
+
+            list.push(item);
         }
-
-        list.push(item);
     });
 
     return list;
