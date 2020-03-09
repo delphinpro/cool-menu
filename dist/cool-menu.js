@@ -3,7 +3,7 @@
  * @author      delphinpro <delphinpro@gmail.com>
  * @copyright   copyright © 2017—2019 delphinpro
  * @license     licensed under the MIT license
- * @version     2.0.1
+ * @version     2.0.2
  * 
  * https://github.com/delphinpro/cool-menu
  */
